@@ -8,14 +8,15 @@
  * @package Elgg
  * @subpackage Core
  *
- * @uses $vars['value']          The current value or an array of current values if multiple is true
- * @uses $vars['options']        An array of strings representing the options for the dropdown field
- * @uses $vars['options_values'] An associative array of "value" => "option"
- *                               where "value" is the name and "option" is
- *                               the value displayed on the button. Replaces
- *                               $vars['options'] when defined.
- * @uses $vars['multiple']       If true, multiselect of values will be allowed in the select box
- * @uses $vars['class']          Additional CSS class
+ * @uses $vars['value']              The current value or an array of current values if multiple is true
+ * @uses $vars['options']            An array of strings representing the options for the dropdown field
+ * @uses $vars['options_values']     An associative array of "value" => "option"
+ *                                   where "value" is the name and "option" is
+ *                                   the value displayed on the button. Replaces
+ *                                   $vars['options'] when defined.
+ * @uses $vars['options_attributes'] An array of keys with the option's attributes in an array 
+ * @uses $vars['multiple']           If true, multiselect of values will be allowed in the select box
+ * @uses $vars['class']              Additional CSS class
  */
 
 $vars['class'] = (array) elgg_extract('class', $vars, []);
@@ -35,6 +36,9 @@ unset($vars['options_values']);
 
 $options = $vars['options'];
 unset($vars['options']);
+
+$options_attributes = $vars['options_attributes'];
+unset($vars['options_attributes']);
 
 $value = is_array($vars['value']) ? $vars['value'] : array($vars['value']);
 $value = array_map('strval', $value);
@@ -59,13 +63,21 @@ if ($options_values) {
 			'selected' => in_array((string)$opt_value, $value),
 		);
 
+		if (!empty($options_attributes[$opt_value])) {
+			$option_attrs = array_merge($option_attrs, $options_attributes[$opt_value]);
+		}
+
 		$options_list .= elgg_format_element('option', $option_attrs, $option);
 	}
 } else {
 	if (is_array($options)) {
-		foreach ($options as $option) {
+		foreach ($options as $opt_key => $option) {
 
 			$option_attrs = ['selected' => in_array((string)$option, $value)];
+
+			if (!empty($options_attributes[$opt_key])) {
+				$option_attrs = array_merge($option_attrs, $options_attributes[$opt_key]);
+			}
 
 			$options_list .= elgg_format_element('option', $option_attrs, $option);
 		}
