@@ -52,8 +52,6 @@ function create_object_entity($guid, $title, $description) {
 			$result = update_data($query);
 			if ($result != false) {
 				// Update succeeded, continue
-				$entity = get_entity($guid);
-				elgg_trigger_event('update', $entity->type, $entity);
 				return $guid;
 			}
 		} else {
