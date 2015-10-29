@@ -121,14 +121,16 @@ class ElggObject extends ElggEntity {
 	 */
 	public function save() {
 		// Save ElggEntity attributes
-		if (!parent::save()) {
+		$ret = parent::save();
+		
+		if (!$ret) {
 			return false;
 		}
 
 		// Save ElggObject-specific attributes
 
 		_elgg_disable_caching_for_entity($this->guid);
-		$ret = create_object_entity($this->get('guid'), $this->get('title'), $this->get('description'));
+		create_object_entity($this->get('guid'), $this->get('title'), $this->get('description'));
 		_elgg_enable_caching_for_entity($this->guid);
 
 		return $ret;
