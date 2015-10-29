@@ -346,15 +346,17 @@ class ElggGroup extends ElggEntity
 	 * @return bool
 	 */
 	public function save() {
-		// Save generic stuff
-		if (!parent::save()) {
+		// Save ElggEntity attributes
+		$ret = parent::save();
+
+		if (!$ret) {
 			return false;
 		}
 
 		// Now save specific stuff
 
 		_elgg_disable_caching_for_entity($this->guid);
-		$ret = create_group_entity($this->get('guid'), $this->get('name'), $this->get('description'));
+		create_group_entity($this->get('guid'), $this->get('name'), $this->get('description'));
 		_elgg_enable_caching_for_entity($this->guid);
 
 		return $ret;

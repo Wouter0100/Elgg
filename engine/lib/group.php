@@ -53,12 +53,7 @@ function create_group_entity($guid, $name, $description) {
 			$result = update_data($query);
 			if ($result != false) {
 				// Update succeeded, continue
-				$entity = get_entity($guid);
-				if (elgg_trigger_event('update', $entity->type, $entity)) {
-					return $guid;
-				} else {
-					$entity->delete();
-				}
+				return $guid;
 			}
 		} else {
 			// Update failed, attempt an insert.
